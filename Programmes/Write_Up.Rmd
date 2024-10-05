@@ -1,0 +1,157 @@
+---
+title: Name of Cool Report
+subtitle: About a Specific Thing
+author: IRD Team Name
+date: "`r format(Sys.time(), '%d %B %Y')`"
+fontsize: 11pt
+urlcolor: blue
+classoption: a4paper
+geometry: margin = 1in
+fig_caption: true
+output: 
+   bookdown::word_document2:
+      reference_docx: "C:\\SOMEWHERE\\SOMEPROJECT\\Product_Output\\Word_Template.docx"
+      toc: false  
+      figure:
+        style: Table
+        layout: autofit
+        width: 1.0
+        caption:
+          style: Table Caption
+          pre: 'Table '
+          sep: ': '
+          topcaption: true
+      
+   bibliography: bibliography.json
+header-includes:
+   - \usepackage[percent]{overpic}   
+   - \usepackage{tikz}
+   - \usetikzlibrary{calc}
+   - \usepackage{graphicx}
+   - \usepackage{placeins}
+   - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \fancyhf{}
+   - \addtolength{\headwidth}{\marginparsep}
+   - \addtolength{\headwidth}{\marginparwidth}   
+   - \usepackage{floatrow}
+   - \floatsetup[figure]{capposition=top}
+
+references:
+- id: Trauma
+  title: "A statewide system of trauma care in Victoria: effect on patient survival"
+  author:
+   - family: Cameron 
+     given: P.A,
+   - family: Gabbe
+     given: B.J,
+   - family: Cooper
+     given: D.J,
+   - family: Walker
+     given: T,
+   - family: Judson
+     given: R,
+   - family: McNeil
+     given: J,     
+  URL: 'https://www.mja.com.au/system/files/issues/189_10_171108/cam10761_fm.pdf'
+  publisher: Medical Journal of Australia
+  type: article-journal 
+  volume: 189, 10
+  page: 546-550
+  issued:
+    year: 2008
+    
+
+---
+\newpage
+
+
+```{r setup, cache=FALSE, include=FALSE}
+
+##
+##    Core libraries
+##
+library(ggplot2)
+library(plyr)
+library(stringr)
+library(reshape2)
+library(lubridate)
+library(calibrate)
+library(Hmisc)
+library(RColorBrewer)
+library(stringi)
+library(sqldf)
+library(extrafont)
+library(scales)
+##
+##    Project-specific libraries
+##
+library(RDCOMClient)
+library(RODBC)
+library(tictoc)
+library(rjson) 
+library(rgtap)
+library(parallel)   
+library(lobstr)
+library(pryr)
+
+library(knitr)
+library(htmlTable)
+library(png)
+library(bookdown)
+library(kableExtra)
+library(pander)
+library(officer)
+
+
+options(xtable.comment = FALSE)
+
+BaseDir <- "C:\\SOMEWHERE\\SOMEPROJECT\\"
+   
+##
+## https://davidgohel.github.io/officedown/index.html
+##   
+   load("C:\\SOMEWHERE\\SOMEPROJECT\\Data_Output\\SOME_DATASET.rda")
+   
+```
+
+   
+
+<!-- 
+##
+##       This bit below is the commentary written in R Markup
+--> 
+
+# Introduction to Spatial
+
+
+Show a graphic
+```{r ChangeinRealWagePC, echo=FALSE, fig.pos='h', out.width = '100%', fig.cap = "Percentage change in real wages"}
+
+knitr::include_graphics(paste0(BaseDir, "Change_in_Real_Wage_PC.png"))
+
+```
+
+Create a table
+
+```{r PHOLead1, echo=FALSE}
+knitr::kable(SOME_DATASET,
+               row.names = FALSE,
+               format = "markdown",
+               align = c('lccccccc'),
+               booktabs = TRUE,
+               caption= "SOME CAPTION NAME")
+```
+
+\FloatBarrier
+
+Cite a something: @Trauma
+
+Footnote a something.[^FootnoteMe]
+
+[^FootnoteMe]: @Trauma
+
+\newpage
+
+# References
+
