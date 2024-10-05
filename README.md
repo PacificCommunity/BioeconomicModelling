@@ -1,10 +1,3 @@
-# BioeconomicModelling
-Bioeconomic modelling, derived from creative thinking of https://github.com/emlab-ucsb/vds-mpa-paper, and the paper https://villasenor-derbez.com/files/publications/011_markets_conservation.pdf
-
-I had difficulty forking this project, hence, its copied
-
-
-From the original git:
 # Environmental Market Design for Large-Scale Marine Conservation
 
 ## Overview
@@ -73,4 +66,3 @@ The data not included would live under `raw_data/spatial`, with two subsequent f
 --------- 
 
 <a href="https://orcid.org/0000-0003-1245-589X" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">orcid.org/0000-0003-1245-589X</a>
-
