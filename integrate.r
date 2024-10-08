@@ -82,6 +82,7 @@
       ##
       ##    STEP 2:  Organise the vessel activity data
       ##
+         source("Programmes/Organise_Vessel_Activity.r") #
 
       ##
       ##    STEP 3:  Estimate the model
