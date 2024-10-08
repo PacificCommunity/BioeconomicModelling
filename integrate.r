@@ -64,7 +64,7 @@
    ##
       library(sf)
       library(rmapshaper)
-      library(tidyverse)
+      library(data.table)
 
    ##
    ##    Set working directory
@@ -74,7 +74,8 @@
       ##
       ##    STEP 1:  Organise the input data
       ##
-         source("Programmes/Organise_Input_Data.r") # This does blah blah blah
+         source("Programmes/Organise_Input_Spatial_Data.r")   # Organises the spatial data
+         source("Programmes/Organise_Input_Financial_Data.r") # Pulls through the FFA value, volume and revenue data from COMTRADE and puts together.
 
 
 

@@ -18,8 +18,9 @@
    ##
    ##    Read in the EEZs
    ##
-      EEZ_Dir <- "Data_Spatial/EEZ/eez_v12.shp"
-      PLW_Dir <- "Data_Spatial/EEZ/PLW_shapefiles.shp"
+      EEZ_Dir  <- "Data_Spatial/EEZ/eez_v12.shp"
+      PLW_Dir  <- "Data_Spatial/PLW_shapefiles/PNMS.shp"
+      
       PLW0_Dir <- "Data_Spatial/WDPA_Oct2024/WDPA_WDOECM_Oct2024_Public_marine_shp_0/WDPA_WDOECM_Oct2024_Public_marine_shp-polygons.shp"
       PLW1_Dir <- "Data_Spatial/WDPA_Oct2024/WDPA_WDOECM_Oct2024_Public_marine_shp_1/WDPA_WDOECM_Oct2024_Public_marine_shp-polygons.shp"
       PLW2_Dir <- "Data_Spatial/WDPA_Oct2024/WDPA_WDOECM_Oct2024_Public_marine_shp_2/WDPA_WDOECM_Oct2024_Public_marine_shp-polygons.shp"
@@ -57,16 +58,15 @@
       ##
       ##   Load the Palua spatial data
       ##
-         #st_layers(PLW0_Dir)
-         LSMPAs <- rbind(st_read(dsn = PLW0_Dir, layer = "WDPA_WDOECM_Oct2024_Public_marine_shp-polygons"),
-                         st_read(dsn = PLW1_Dir, layer = "WDPA_WDOECM_Oct2024_Public_marine_shp-polygons"),
-                         st_read(dsn = PLW2_Dir, layer = "WDPA_WDOECM_Oct2024_Public_marine_shp-polygons"))
+         #st_layers(PLW_Dir)
+         PNMS <- st_read(dsn = PLW_Dir, layer = "PNMS")
 
-         LSMPAs$WDPAID <- 555622118
-         LSMPAs$ISO3   <- "PLW"
+         PNMS$WDPAID <- 555622118
+         PNMS$ISO3   <- "PLW"
 
-         LSMPAs <- ms_simplify(LSMPAs, keep_shapes = TRUE)
-         LSMPAs <- st_rotate(LSMPAs)                 # st_rotate lives in the R/functions.r file
+         PNMS <- ms_simplify(PNMS, keep_shapes = TRUE)
+         PNMS <- st_rotate(PNMS)                           
+         
       ##
       ##   Load the Marine Protection Areas spatial data
       ##
@@ -75,43 +75,28 @@
                          st_read(dsn = PLW1_Dir, layer = "WDPA_WDOECM_Oct2024_Public_marine_shp-polygons"),
                          st_read(dsn = PLW2_Dir, layer = "WDPA_WDOECM_Oct2024_Public_marine_shp-polygons"))
 
-         LSMPAs$WDPAID <- 555622118
-         LSMPAs$ISO3   <- "PLW"
-
+         LSMPAs <- LSMPAs[(LSMPAs$GIS_AREA > 30000) & 
+                          (LSMPAs$WDPAID  != 555622118),]
          LSMPAs <- ms_simplify(LSMPAs, keep_shapes = TRUE)
-         LSMPAs <- st_rotate(LSMPAs)                 # st_rotate lives in the R/functions.r file
+         LSMPAs <- st_rotate(LSMPAs)                       
+
+         LSMPAs <- rbind(LSMPAs[,c("WDPAID","ISO3")],
+                         PNMS[,  c("WDPAID","ISO3")])
+                         
+      ##
+      ##   Identify the Pheonix Island Protected Area
+      ##
+         PIPA <- LSMPAs[LSMPAs$WDPAID == 309888, ]
+
 
    ##
-   ## Save files our produce some final output of something
+   ## Save files
    ##
       save(EEZ_subset, file = 'Data_Spatial/EEZ_subset.rda')
       save(PNA_EEZ,    file = 'Data_Spatial/PNA_EEZ.rda')
+      save(LSMPAs,     file = 'Data_Spatial/LSMPAs.rda')
+      save(PIPA,       file = 'Data_Spatial/PIPA.rda')
       
 ##
 ##    And we're done
 ##
-
-# The PNMS lines are different
-pnms <- st_read(here("raw_data", "spatial", "PLW_shapefiles"),
-                "PNMS") %>% 
-  mutate(WDPAID = 555622118,
-         ISO3 = "PLW") %>% 
-  select(WDPAID, ISO3) %>% 
-  ms_simplify(keep_shapes = T) %>% 
-  st_rotate()
-
-# Load the database
-st_read(here::here("raw_data", "spatial", "WDPA_Jan2019"),
-        layer = "WDPA_Jan2019_marine-shapefile-polygons",
-        quiet = T,
-        stringsAsFactors = F) %>% 
-  filter(GIS_M_AREA > 30000,                            ### Keep LSMPAs only
-         !WDPAID == 555622118) %>%                      ### Remove the PNMS, which has new boundaries
-  ms_simplify(keep_shapes = T) %>% 
-  st_rotate() %>% 
-  select(WDPAID, ISO3) %>% 
-  rbind(pnms) %>% 
-  arrange(WDPAID) %>% 
-  st_write(dsn = here("data", "spatial", "LSMPAs.gpkg")) #Save to file
-
-# END OF SCRIPT
