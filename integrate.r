@@ -62,6 +62,7 @@
    ##
    ##    Project-specific libraries
    ##
+      library(RODBC)
       library(sf)
       library(rmapshaper)
       library(data.table)
@@ -72,37 +73,21 @@
       setwd("C:\\Users\\jamesh\\GIT\\BioeconomicModelling")
 
       ##
-      ##    STEP 1:  Organise the input data
+      ##    STEP 1:  Organise the input data - the spatial, and the financial
       ##
          source("Programmes/Organise_Input_Spatial_Data.r")   # Organises the spatial data
          source("Programmes/Organise_Input_Financial_Data.r") # Pulls through the FFA value, volume and revenue data from COMTRADE and puts together.
 
 
+      ##
+      ##    STEP 2:  Organise the vessel activity data
+      ##
 
       ##
-      ##    STEP 2:
+      ##    STEP 3:  Estimate the model
       ##
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
-      ##
-      ##    STEP 3:
-      ##
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
-      ##
-      ##    STEP 4:
-      ##
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
-      ##
-      ##    STEP x: Final output
-      ##
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
 
-      ##
-      ##    Write up of results
-      ##      
-         rmarkdown::render("Programmes/Write_Up.rmd", output_file = "C:\\SOMEWHERE\\SOMEPROJECT\\Product_Output\\SOME_WRITE_UP.docx")                   
+
 
 
 ##
