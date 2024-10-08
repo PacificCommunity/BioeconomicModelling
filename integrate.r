@@ -62,26 +62,21 @@
    ##
    ##    Project-specific libraries
    ##
-      library(xxxx)
-      library(xxxx)
-      library(xxxx)
+      library(sf)
+      library(rmapshaper)
+      library(tidyverse)
 
    ##
    ##    Set working directory
    ##
-      setwd("C:\\SOMEWHERE\\SOMEPROJECT")
+      setwd("C:\\Users\\jamesh\\GIT\\BioeconomicModelling")
 
-   ##
-   ##   Modular-programmed code from here down. Each following programme
-   ##      needs to be able to 'stand alone' in the sense that it starts of 
-   ##       reading all the data it needs, it processes it, and it concludes
-   ##       either writing data for a following programme, or creating a final
-   ##       output. 
-   ##
       ##
-      ##    STEP 1:
+      ##    STEP 1:  Organise the input data
       ##
-         source("Programmes/xxxxxxxx.r") # This does blah blah blah
+         source("Programmes/Organise_Input_Data.r") # This does blah blah blah
+
+
 
       ##
       ##    STEP 2:

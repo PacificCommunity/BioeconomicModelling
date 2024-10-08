@@ -8,95 +8,36 @@
 ##
 ##    Put functions in here
 ##
+st_rotate <- function(x){
+  x2 <- (sf::st_geometry(x) + c(360,90)) %% c(360) - c(0,90) 
+  x3 <- sf::st_wrap_dateline(sf::st_set_crs(x2 - c(180,0), 4326)) + c(180,0)
+  x4 <- sf::st_set_crs(x3, 4326)
+  
+  x <- sf::st_set_geometry(x, x4)
+  
+  return(x)
+}
 
-AskCreds <- function()
-{
-##    Function: AskCreds
-##
-##    Objective: This function is designed to pop up a text box that allows
-##               the user to enter their username and password crediential at one time
-##               and have them available for the rest of the database. 
-##
-##               It was developed from reading the RGtk2 manual and from 
-##                  https://stackoverflow.com/questions/15455692/how-to-return-values-from-gwidgets-and-handlers
-##                  https://stackoverflow.com/questions/12558532/populate-a-dataframe-from-spinbuttons-in-rgtk2
-##               Inspired by similar functionality from MBIE, but redeveloped from 
-##               scratch.
-##
-##    Author:    James Hogan, Sense Partners, 24 May 2020
-##
-  library(RGtk2)
-   ##
-   ## Initialise a window
-   ##
-      window <- gtkWindow()
-      window["title"] <- "Sense Partners for R"
-      frame <- gtkFrameNew("AskCreds")
-      window$add(frame)
-   ##
-   ## Add a box to hold the text boxs and the button
-   ##
-      box1 <- gtkVBoxNew()
-      box1$setBorderWidth(30)
-      frame$add(box1)  
+# Function to extract lon and lat from the geometry listcol
+# From https://github.com/r-spatial/sf/issues/231#issuecomment-290817623
 
-      box2 <- gtkHBoxNew(spacing= 10) #distance between elements
-      box2$setBorderWidth(24)
-   ##
-   ## Put the text boxs in the first box
-   ##
-      ##
-      ##    Username
-      ##
-         Ulabel = gtkLabelNewWithMnemonic("UserName") #text label
-         box1$packStart(Ulabel)
-         UserName <- gtkEntryNew()
-         UserName$setWidthChars(25)
-         box1$packStart(UserName)
-      ##
-      ##    Password
-      ##
-         Password <- gtkEntryNew()
-         Password$setWidthChars(25)
-         box1$packStart(Password)
-         Plabel = gtkLabelNewWithMnemonic("Password") #text label
-         box1$packStart(Plabel)
-   ##
-   ## Put the text boxs in the first box
-   ##
-      box2 <- gtkHBoxNew(spacing= 10) # distance between elements
-      box2$setBorderWidth(24)
-      box1$packStart(box2)
-
-      Calculate <- gtkButton("Calculate")
-      box2$packStart(Calculate,fill=F) #button which will start calculating
-
-   ##
-   ## Put the text boxs in the first box
-   ##
-   Hold <- list()
-   gSignalConnect(Calculate, "clicked", function(entry, ...) {
-     if ((UserName$getText() == "") | (Password$getText() == "")) return(invisible(NULL)) #if no text do nothing
-      Hold[["UserName"]] <<- UserName$getText()
-      Hold[["Password"]] <<- Password$getText()
-      window$destroy()
-   })
-   while(length(Hold) == 0)
-   {
-      Sys.sleep(.5)   
-   }
-   return(Hold)
+sfc_as_cols <- function(x, names = c("lon","lat")) {
+  ret <- sf::st_coordinates(x)
+  ret <- tibble::as_tibble(ret)
+  x <- x[ , !names(x) %in% names]
+  ret <- setNames(ret,names)
+  dplyr::bind_cols(x,ret)
 }
 
 ##
-##    Syntax:
-##       Creds <- AskCreds()
+##    List of iso_codes that define the Pacific Island Countries
 ##
-##    print(Creds)
+   iso_codes <- c("KIR","ASM","COK","FSM","MHL","NRU","PNG","SLB","TKL","TUV","UMI","FJI","NIU","TON","WSM","WLF","VUT","NCL","PLW","IDN")
+
 ##
-
-
-
+##   Who are the Parties to the Nauru Agreement
+##
+   PNA_codes <- c("FSM", "KIR", "MHL", "NRU", "PLW", "PNG", "SLB", "TUV", "TKL")
 
 
 
