@@ -68,6 +68,7 @@
       library(sp)
       library(rmapshaper)
       library(data.table)
+      library(parallel)   
 
    ##
    ##    Set working directory
