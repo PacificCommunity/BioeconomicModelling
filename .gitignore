@@ -95,3 +95,5 @@ docs/Markets*
 docs/Supplementary*
 
 Data_Spatial/Vessel_Ever_Fished_PNA.rda
+Data_Raw/vms.txt
+Data_Spatial/VMS.rda
