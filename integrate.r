@@ -73,6 +73,7 @@
    ##    Set working directory
    ##
       setwd("C:\\Users\\jamesh\\GIT\\BioeconomicModelling")
+      setwd("C:\\Work_Related_Projects\\BioeconomicModelling")
 
       ##
       ##    STEP 1:  Organise the input data - the spatial, and the financial
