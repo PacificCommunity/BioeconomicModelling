@@ -54,7 +54,7 @@
       ##   Extract the Parties to the Nauru Agreement
       ##
            PNA_EEZ <- EEZ[EEZ$ISO_TER1 %in% PNA_codes,]     # PNA_codes lives in the R/functions.r file
-
+           PNA_EEZ <- st_rotate(PNA_EEZ)
       ##
       ##   Load the Palua spatial data
       ##

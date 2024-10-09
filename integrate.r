@@ -54,16 +54,18 @@
       library(RColorBrewer)
       library(stringi)
       library(sqldf)
-      library(extrafont)
       library(scales)
       library(RDCOMClient)
       library(extrafont)
       library(tictoc)
+      library(sysfonts)
+      library(showtext)
    ##
    ##    Project-specific libraries
    ##
       library(RODBC)
       library(sf)
+      library(sp)
       library(rmapshaper)
       library(data.table)
 
