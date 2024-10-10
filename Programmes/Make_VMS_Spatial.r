@@ -55,14 +55,33 @@
    ##
       VMS <- fread(file = "Data_Raw/vms.txt")
 
+   ##
+   ##    find locations already processed
+   ##
+         Contents <- as.data.frame(list.files(path = "Parallel/",  pattern = "*.rda"))
+         names(Contents) = "DataFrames"
+         Contents$Dframe <- str_split_fixed(Contents$DataFrames, "\\.", n = 2)[,1]
+         Contents$Dframe <- str_replace_all(Contents$Dframe, "Obs_split_", "")
+         Contents <- Contents[str_detect(Contents$DataFrames, "XXVMS_Split"),]
+         
+         To_Process <- 0:49
+         Already_Processed <- as.numeric(str_split_fixed(Contents$Dframe, "XX", n = 2)[,1])
 
-      Size_of_Loops <- ceiling(nrow(VMS) / 100)
+         To_Process <- To_Process[!(To_Process %in% Already_Processed)]
+         
+   ##
+   ##    Restart the parallel process
+   ##
 
-      cl <- makeCluster(detectCores())
-      clusterEvalQ(cl, { c(library(sf), library(sp)) }) 
+
+      Size_of_Loops <- ceiling(nrow(VMS) / 50)
+
+#      cl <- makeCluster(detectCores())
+      cl <- makeCluster(20)
+      clusterEvalQ(cl, { c(library(sf), library(sp), library(data.table)) }) 
       clusterExport(cl, c("PNA_EEZ"))
       
-      for(i in 0:99)
+      for(i in To_Process)
       {
       
        Grab_Obs <- VMS[(i*Size_of_Loops + 1):min(((i+1)*Size_of_Loops), nrow(VMS)),]
@@ -70,6 +89,8 @@
         Peg_Me <- function(Fistful)
          {
             Fistful_of_Data <- Grab_Obs[Fistful,]
+            Fistful_of_Data <- Fistful_of_Data[Fistful_of_Data$longitude > -190,]
+            
             ##
             ##    Grab their TLAs - both now and previous
             ##
@@ -78,7 +99,7 @@
             proj4string(Fistful_of_Data) <- CRS("+proj=longlat +datum=WGS84")
             
             Fistful_of_Data <- st_as_sf(Fistful_of_Data)               
-            Fistful_of_Data <- st_transform(Fistful_of_Data, st_crs(PNA_EEZ))
+           # Fistful_of_Data <- st_transform(Fistful_of_Data, st_crs(PNA_EEZ))
             Fistful_of_Data <- st_rotate(Fistful_of_Data)
             
             return(Fistful_of_Data)
